@@ -73,21 +73,31 @@ const Page = () => {
     })()
   }, [services, user])
 
-  const sortByNewest = items => {
-    return Object.values(items).sort((a, b) => b.created - a.created)
-  }
-
   const Humans = () => {
 
-    if (!(state && state.profiles)) return false
+    if (!(state && state.profiles && state.projects)) return false
 
-    const profiles = state.profiles
+    const profiles = Object.values(state.profiles)
+    const projects = Object.values(state.projects)
 
+    const sortHumans = (algorithm) => {
+  
+      switch (algorithm) {
+        case "byProjectCount":
+         const countProjects = (owner) => projects.filter(x => x.owner === owner).length
+         return profiles.sort((a, b) => countProjects(b.owner) - countProjects(a.owner))
+        
+        case "byNewest":
+        default:
+          return profiles.sort((a, b) => b.created - a.created)
+      }
+    }
+  
     return (
       <div className='block text-center'>
       <h1 className='uppercase text-center py-4'>Humans</h1>
       <ul>
-        {sortByNewest(profiles).map((meta) => {
+        {sortHumans("byProjectCount").map((meta) => {
           const profile = meta.data
           const created = humanize(Date.now() - meta.created)
           return (
