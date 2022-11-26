@@ -98,16 +98,17 @@ const Page = () => {
       <h1 className='uppercase text-center py-4'>Humans</h1>
       <ul>
         {sortHumans("byProjectCount").map((meta) => {
-          const profile = meta.data
           const created = humanize(Date.now() - meta.created)
+          const { memberId, name, pronouns, city, company, bio, email, twitter } = meta.data
+          const combine = (items) => items.filter(i => i.trim() !== "").join(" - ")
           return (
             <li key={meta.id} className='text-gray-700 py-4'>
               <p><small>{created}</small></p>
-              <p><small>{profile.memberId}</small></p>
-              <p><b>{profile.name}</b> ({profile.pronouns})</p>
-              <p>{profile.city} - {profile.company}</p>
-              <p>{profile.bio}</p>
-              <p>{profile.email} - {profile.twitter}</p>
+              <p><small>{memberId}</small></p>
+              <p><b>{name}</b> {pronouns.trim() ? `(${pronouns})` : ``} </p>
+              <p>{combine([city, company])}</p>
+              <p>{bio}</p>
+              <p>{combine([email, twitter])}</p>
             </li>
           )
         })}
