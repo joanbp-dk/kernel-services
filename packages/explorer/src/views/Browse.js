@@ -6,7 +6,7 @@
  *
  */
 
-import { useEffect, useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useServices, timeUtils, Navbar, Footer } from '@kernel/common'
 
@@ -78,11 +78,14 @@ const Page = () => {
   }
 
   const Humans = () => {
+
+    if (!(state && state.profiles)) return false
+
     return (
       <div className='block text-center'>
       <h1 className='uppercase text-center py-4'>Humans</h1>
       <ul>
-        {state && state.profiles && sortByNewest(state.profiles).map((e) => {
+        {sortByNewest(state.profiles).map((e) => {
           const meta = e
           const profile = e.data
           const created = Date.now() - meta.created
@@ -103,11 +106,14 @@ const Page = () => {
   }
 
   const Adventures = () => {
+
+    if (!(state && state.projects)) return false
+
     return (
       <div className='block text-center'>
       <h1 className='uppercase text-center'>Adventures</h1>
       <ul>
-        {state && state.projects && Object.entries(state.projects).map(([_, e]) => {
+        {Object.entries(state.projects).map(([_, e]) => {
           const meta = e
           const project = e.data
           const updated = Date.now() - meta.created
@@ -147,8 +153,11 @@ const Page = () => {
               <div className='block text-center'>
                 <p className='text-purple-900 text-center'> ... Loading recommendations ... </p>
               </div>}
-            <Humans />
-            <Adventures />
+            {state && !state.error && !state.loading &&
+              <React.Fragment>
+                <Humans />
+                <Adventures />
+              </React.Fragment>}
           </div>
         </div>
       </div>
