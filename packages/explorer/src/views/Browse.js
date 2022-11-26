@@ -81,17 +81,18 @@ const Page = () => {
 
     if (!(state && state.profiles)) return false
 
+    const profiles = state.profiles
+
     return (
       <div className='block text-center'>
       <h1 className='uppercase text-center py-4'>Humans</h1>
       <ul>
-        {sortByNewest(state.profiles).map((e) => {
-          const meta = e
-          const profile = e.data
-          const created = Date.now() - meta.created
+        {sortByNewest(profiles).map((meta) => {
+          const profile = meta.data
+          const created = humanize(Date.now() - meta.created)
           return (
             <li key={meta.id} className='text-gray-700 py-4'>
-              <p><small>{humanize(created)}</small></p>
+              <p><small>{created}</small></p>
               <p><small>{profile.memberId}</small></p>
               <p><b>{profile.name}</b> ({profile.pronouns})</p>
               <p>{profile.city} - {profile.company}</p>
@@ -109,17 +110,18 @@ const Page = () => {
 
     if (!(state && state.projects)) return false
 
+    const projects = state.projects
+
     return (
       <div className='block text-center'>
       <h1 className='uppercase text-center'>Adventures</h1>
       <ul>
-        {Object.entries(state.projects).map(([_, e]) => {
-          const meta = e
-          const project = e.data
-          const updated = Date.now() - meta.created
+        {Object.entries(projects).map(([_, meta]) => {
+          const project = meta.data
+          const updated = humanize(Date.now() - meta.created)
           return (
             <li key={meta.id} className='text-gray-700 py-4'>
-              <small>{humanize(updated)}</small>
+              <small>{updated}</small>
               <p>
                 <b>
                   <a target='_blank' rel='noreferrer' href={`https://staging.adventures.kernel.community/view/${meta.id}`}>{project.title}</a>
