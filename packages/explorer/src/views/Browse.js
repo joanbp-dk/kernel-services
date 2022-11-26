@@ -6,7 +6,7 @@
  *
  */
 
-import React, { useEffect, useReducer } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useServices, timeUtils, Navbar, Footer } from '@kernel/common'
 
@@ -92,25 +92,41 @@ const Page = () => {
           return profiles.sort((a, b) => b.created - a.created)
       }
     }
+
+    const ExpandableBusinessCard = (profile) => {
+      const [expanded, setExpanded] = useState(false)
+      const created = humanize(Date.now() - profile.created)
+      const { memberId, name, pronouns, city, company, bio, email, twitter } = profile.data
+      const combine = (items) => items.filter(i => i.trim() !== "").join(" - ")
+      const toggleExpanded = () => setExpanded(!expanded)
+      if (!expanded) {
+        return (
+          <li key={profile.id} className='text-gray-700 py-4 border-2' onClick={toggleExpanded}>
+            <p><small>{created}</small></p>
+            <p><b>{name}</b></p>
+          </li>
+        )
+      }
+      else {
+        return (
+          <li key={profile.id} className='text-gray-700 py-4 border-4' onClick={toggleExpanded}>
+            <p><small>{created}</small></p>
+            <p><small>{memberId}</small></p>
+            <p><b>{name}</b> {pronouns.trim() ? `(${pronouns})` : ``} </p>
+            <p>{combine([city, company])}</p>
+            <p>{bio}</p>
+            <p>{combine([email, twitter])}</p>
+          </li>
+        )
+      }
+    }
   
     return (
       <div className='block text-center'>
       <h1 className='uppercase text-center py-4'>Humans</h1>
       <ul>
-        {sortHumans("byProjectCount").map((meta) => {
-          const created = humanize(Date.now() - meta.created)
-          const { memberId, name, pronouns, city, company, bio, email, twitter } = meta.data
-          const combine = (items) => items.filter(i => i.trim() !== "").join(" - ")
-          return (
-            <li key={meta.id} className='text-gray-700 py-4'>
-              <p><small>{created}</small></p>
-              <p><small>{memberId}</small></p>
-              <p><b>{name}</b> {pronouns.trim() ? `(${pronouns})` : ``} </p>
-              <p>{combine([city, company])}</p>
-              <p>{bio}</p>
-              <p>{combine([email, twitter])}</p>
-            </li>
-          )
+        {sortHumans("byProjectCount").map((profile) => {
+          return ExpandableBusinessCard(profile)
         })}
       </ul>
     </div>
