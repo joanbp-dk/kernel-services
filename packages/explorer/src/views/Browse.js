@@ -93,6 +93,24 @@ const Page = () => {
       }
     }
 
+    const PersonalAdventures = (profile) => {
+      const adventures = projects.filter(x => x.owner === profile.owner)
+      if (adventures.length === 0) return false
+      else {
+        return (
+          <div>
+            <p className='py-4'><i>Adventures:</i></p>
+            <ul>
+              {adventures.map((a) => 
+              <li key={a.id}>
+                {a.id}
+              </li>)}
+            </ul>
+          </div>
+        )
+     }
+    }
+
     const ExpandableBusinessCard = (profile) => {
       const [expanded, setExpanded] = useState(false)
       const created = humanize(Date.now() - profile.created)
@@ -116,6 +134,7 @@ const Page = () => {
             <p>{combine([city, company])}</p>
             <p>{bio}</p>
             <p>{combine([email, twitter])}</p>
+            { PersonalAdventures(profile) }
           </li>
         )
       }
