@@ -119,15 +119,20 @@ const Page = () => {
       const toggleExpanded = () => setExpanded(!expanded)
       if (!expanded) {
         return (
-          <li key={profile.id} className='text-gray-700 py-4 border-2' onClick={toggleExpanded}>
-            <p><small>{created}</small></p>
-            <p><b>{name}</b></p>
+          <li key={profile.id} className='text-gray-700 px-4 py-4 border-2 rounded-md my-1 flex' onClick={toggleExpanded}>
+            <div className="w-32">
+              <img src="https://picsum.photos/75" alt="{name}" className="rounded-full" />
+            </div>
+            <div className="text-left">
+              <p><small>{created}</small></p>
+              <p><b>{name}</b></p>
+            </div>
           </li>
         )
       }
       else {
         return (
-          <li key={profile.id} className='text-gray-700 py-4 border-4' onClick={toggleExpanded}>
+          <li key={profile.id} className='text-gray-700 py-4 my-1 border-4 rounded-3xl' onClick={toggleExpanded}>
             <p><small>{created}</small></p>
             <p><small>{memberId}</small></p>
             <p><b>{name}</b> {pronouns.trim() ? `(${pronouns})` : ``} </p>
